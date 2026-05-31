@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pwoteksyon — Ayiti an Sekirite</title>
+  <meta name="description" content="Rapòte ensidan anonim ann Ayiti. Signalez des incidents anonymement en Haïti.">
+  <meta property="og:title" content="Pwoteksyon — Ayiti an Sekirite">
+  <meta property="og:description" content="Aplikasyon sekirite kominotè pou Ayiti. Application de sécurité communautaire pour Haïti.">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:      #111827;
+      --bg2:     #1F2937;
+      --bg3:     #374151;
+      --border:  rgba(255,255,255,0.08);
+      --red:     #E8362A;
+      --red2:    #C0271C;
+      --green:   #10B981;
+      --blue:    #3B82F6;
+      --yellow:  #F59E0B;
+      --purple:  #8B5CF6;
+      --text:    #F9FAFB;
+      --text2:   #9CA3AF;
+      --text3:   #6B7280;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg); color: var(--text);
+      font-family: 'Inter', -apple-system, sans-serif;
+      line-height: 1.6; overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* ── NAVBAR ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(17,24,39,0.85); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px; height: 64px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo { display: flex; align-items: center; gap: 10px; }
+    .nav-dot   { width: 10px; height: 10px; background: var(--red); border-radius: 50%; animation: blink 2s infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    .nav-name  { font-size: 20px; font-weight: 900; letter-spacing: -0.5px; }
+    .nav-links { display: flex; align-items: center; gap: 24px; }
+    .nav-links a { font-size: 14px; font-weight: 600; color: var(--text2); transition: color 0.15s; }
+    .nav-links a:hover { color: var(--text); }
+    .lang-toggle {
+      display: flex; background: var(--bg3); border-radius: 20px; padding: 3px;
+    }
+    .lang-btn {
+      padding: 4px 12px; border-radius: 16px; border: none; background: transparent;
+      color: var(--text2); font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s;
+    }
+    .lang-btn.active { background: #fff; color: var(--bg); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      padding: 100px 24px 80px; text-align: center; position: relative; overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(232,54,42,0.15) 0%, transparent 70%);
+    }
+    .hero-content { position: relative; z-index: 1; max-width: 680px; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(232,54,42,0.12); border: 1px solid rgba(232,54,42,0.3);
+      color: #FCA5A5; border-radius: 20px; padding: 6px 16px;
+      font-size: 12px; font-weight: 700; margin-bottom: 28px; letter-spacing: 0.5px;
+    }
+    .hero h1 {
+      font-size: clamp(42px, 8vw, 72px); font-weight: 900; line-height: 1.05;
+      letter-spacing: -2px; margin-bottom: 20px;
+    }
+    .hero h1 span { color: var(--red); }
+    .hero-sub {
+      font-size: clamp(16px, 2.5vw, 20px); color: var(--text2);
+      margin-bottom: 40px; max-width: 520px; margin-left: auto; margin-right: auto;
+      line-height: 1.6;
+    }
+    .hero-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--red); color: #fff; padding: 16px 32px;
+      border-radius: 14px; font-size: 16px; font-weight: 800;
+      transition: transform 0.15s, box-shadow 0.15s;
+      box-shadow: 0 4px 24px rgba(232,54,42,0.4);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(232,54,42,0.5); }
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.06); border: 1px solid var(--border);
+      color: var(--text); padding: 16px 32px; border-radius: 14px;
+      font-size: 16px; font-weight: 700; transition: background 0.15s;
+    }
+    .btn-secondary:hover { background: rgba(255,255,255,0.1); }
+    .hero-stats {
+      display: flex; gap: 32px; justify-content: center; margin-top: 56px;
+      flex-wrap: wrap;
+    }
+    .hero-stat { text-align: center; }
+    .hero-stat-num { font-size: 28px; font-weight: 900; color: var(--text); }
+    .hero-stat-label { font-size: 12px; color: var(--text3); font-weight: 600; margin-top: 2px; }
+
+    /* ── SECTION BASE ── */
+    section { padding: 96px 24px; }
+    .container { max-width: 1080px; margin: 0 auto; }
+    .section-tag {
+      font-size: 11px; font-weight: 800; letter-spacing: 2px; color: var(--red);
+      text-transform: uppercase; margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: clamp(28px, 4vw, 42px); font-weight: 900;
+      letter-spacing: -1px; margin-bottom: 16px; line-height: 1.15;
+    }
+    .section-sub { font-size: 16px; color: var(--text2); max-width: 520px; line-height: 1.7; }
+
+    /* ── HOW IT WORKS ── */
+    #how { background: var(--bg2); }
+    .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; margin-top: 56px; }
+    .step {
+      background: var(--bg); border: 1px solid var(--border); border-radius: 20px;
+      padding: 32px; position: relative;
+    }
+    .step-num {
+      width: 44px; height: 44px; background: rgba(232,54,42,0.15);
+      border: 1px solid rgba(232,54,42,0.3); border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; font-weight: 900; color: var(--red); margin-bottom: 20px;
+    }
+    .step h3 { font-size: 18px; font-weight: 800; margin-bottom: 8px; }
+    .step p  { font-size: 14px; color: var(--text2); line-height: 1.7; }
+    .step-icon { font-size: 28px; margin-bottom: 12px; }
+
+    /* ── CATEGORIES ── */
+    .cats { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 14px; margin-top: 48px; }
+    .cat-card {
+      border-radius: 16px; padding: 24px 16px; text-align: center;
+      border: 1px solid var(--border); transition: transform 0.15s, border-color 0.15s;
+    }
+    .cat-card:hover { transform: translateY(-3px); }
+    .cat-emoji { font-size: 32px; margin-bottom: 10px; }
+    .cat-name  { font-size: 13px; font-weight: 700; }
+
+    /* ── PRIVACY ── */
+    #privacy { background: var(--bg2); }
+    .privacy-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px; margin-top: 48px;
+    }
+    .privacy-card {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 16px; padding: 24px;
+    }
+    .privacy-icon { font-size: 28px; margin-bottom: 12px; }
+    .privacy-card h4 { font-size: 15px; font-weight: 800; margin-bottom: 8px; }
+    .privacy-card p  { font-size: 13px; color: var(--text2); line-height: 1.7; }
+
+    /* ── POLICY ── */
+    #policy { border-top: 1px solid var(--border); }
+    .policy-box {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 20px; padding: 40px; margin-top: 48px;
+    }
+    .policy-box h3 { font-size: 18px; font-weight: 800; margin: 28px 0 10px; }
+    .policy-box h3:first-child { margin-top: 0; }
+    .policy-box p, .policy-box li {
+      font-size: 14px; color: var(--text2); line-height: 1.8; margin-bottom: 8px;
+    }
+    .policy-box ul { padding-left: 20px; }
+    .policy-box li { margin-bottom: 4px; }
+    .policy-date { font-size: 12px; color: var(--text3); margin-bottom: 20px; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--bg2); border-top: 1px solid var(--border);
+      padding: 48px 24px; text-align: center;
+    }
+    .footer-logo { font-size: 24px; font-weight: 900; margin-bottom: 8px; }
+    .footer-sub  { font-size: 13px; color: var(--text3); margin-bottom: 24px; }
+    .footer-links { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; margin-bottom: 32px; }
+    .footer-links a { font-size: 13px; color: var(--text2); font-weight: 600; transition: color 0.15s; }
+    .footer-links a:hover { color: var(--text); }
+    .footer-copy { font-size: 12px; color: var(--text3); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      nav { padding: 0 16px; }
+      .nav-links { gap: 12px; }
+      .nav-links a { display: none; }
+      section { padding: 72px 16px; }
+      .hero-stats { gap: 20px; }
+      .policy-box { padding: 24px; }
+    }
+
+    /* ── UTILS ── */
+    .text-red    { color: var(--red); }
+    .text-green  { color: var(--green); }
+    [data-kr], [data-fr] { display: none; }
+    .lang-kr [data-kr]   { display: block; }
+    .lang-fr [data-fr]   { display: block; }
+    .lang-kr [data-kr].inline, .lang-fr [data-fr].inline { display: inline; }
+    span[data-kr], span[data-fr] { display: none; }
+    .lang-kr span[data-kr], .lang-fr span[data-fr] { display: inline; }
+  </style>
+</head>
+<body class="lang-kr">
+
+<!-- ── NAVBAR ──────────────────────────────────────────────────── -->
+<nav>
+  <div class="nav-logo">
+    <div class="nav-dot"></div>
+    <span class="nav-name">Pwoteksyon</span>
+  </div>
+  <div class="nav-links">
+    <a href="#how">
+      <span data-kr>Kijan</span>
+      <span data-fr>Comment</span>
+    </a>
+    <a href="#privacy">
+      <span data-kr>Konfidansyalite</span>
+      <span data-fr>Confidentialité</span>
+    </a>
+    <a href="#policy">
+      <span data-kr>Politik</span>
+      <span data-fr>Politique</span>
+    </a>
+    <div class="lang-toggle">
+      <button class="lang-btn active" onclick="setLang('kr')">KR</button>
+      <button class="lang-btn" onclick="setLang('fr')">FR</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ── HERO ─────────────────────────────────────────────────────── -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-badge">
+      🇭🇹 <span data-kr>Fèt pou Ayiti</span><span data-fr>Fait pour Haïti</span>
+    </div>
+
+    <h1>
+      <span data-kr>Ayiti<br><span class="text-red">pi an sekirite</span><br>ansanm</span>
+      <span data-fr>Haïti<br><span class="text-red">plus en sécurité</span><br>ensemble</span>
+    </h1>
+
+    <p class="hero-sub">
+      <span data-kr>Rapòte vyolans, wout bloke, inondasyon — anonim, gratis, san kont. Kominote a konfime, ou pwoteje.</span>
+      <span data-fr>Signalez violences, routes bloquées, inondations — anonymement, gratuitement, sans compte. La communauté confirme, vous êtes protégé.</span>
+    </p>
+
+    <div class="hero-btns">
+      <a class="btn-primary" href="#download">
+        📲 <span data-kr>Telechaje sou Android</span><span data-fr>Télécharger sur Android</span>
+      </a>
+      <a class="btn-secondary" href="#how">
+        <span data-kr>Kijan li travay ?</span><span data-fr>Comment ça marche ?</span>
+      </a>
+    </div>
+
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-num">100%</div>
+        <div class="hero-stat-label">
+          <span data-kr>Anonim</span><span data-fr>Anonyme</span>
+        </div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">6h</div>
+        <div class="hero-stat-label">
+          <span data-kr>Ekspire otomatik</span><span data-fr>Expiration auto</span>
+        </div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">0</div>
+        <div class="hero-stat-label">
+          <span data-kr>Done pèsonèl</span><span data-fr>Donnée personnelle</span>
+        </div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">Gratis</div>
+        <div class="hero-stat-label">
+          <span data-kr>Pou tout moun</span><span data-fr>Pour tous</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── HOW IT WORKS ─────────────────────────────────────────────── -->
+<section id="how">
+  <div class="container">
+    <div class="section-tag">
+      <span data-kr>Kijan li travay</span><span data-fr>Comment ça marche</span>
+    </div>
+    <h2 class="section-title">
+      <span data-kr>3 etap senp</span><span data-fr>3 étapes simples</span>
+    </h2>
+    <p class="section-sub">
+      <span data-kr>Pa gen kont, pa gen non, pa gen imèl. Jis rapòte sa w wè.</span>
+      <span data-fr>Pas de compte, pas de nom, pas d'email. Signalez juste ce que vous voyez.</span>
+    </p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-icon">📍</div>
+        <h3><span data-kr>Chwazi tip ensidan</span><span data-fr>Choisir le type</span></h3>
+        <p>
+          <span data-kr>Vyolans, wout bloke, inondasyon, zòn lib, medikal — chwazi sa ki koresponn ak sitiyasyon an.</span>
+          <span data-fr>Violence, route bloquée, inondation, zone libre, médical — choisissez ce qui correspond à la situation.</span>
+        </p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-icon">📷</div>
+        <h3><span data-kr>Voye rapò anonim</span><span data-fr>Envoyer un rapport</span></h3>
+        <p>
+          <span data-kr>Ajoute yon foto (opsyonèl). GPS detekte kote ou ye a otomatikman. Pa gen done pèsonèl ki sove.</span>
+          <span data-fr>Ajoutez une photo (optionnel). Le GPS détecte votre position automatiquement. Aucune donnée personnelle sauvegardée.</span>
+        </p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-icon">✅</div>
+        <h3><span data-kr>Kominote konfime</span><span data-fr>La communauté confirme</span></h3>
+        <p>
+          <span data-kr>Lòt itilizatè yo konfime oswa demanti rapò a. Score konfyans ogmante. Alèt ekspire nan 6 è.</span>
+          <span data-fr>D'autres utilisateurs confirment ou infirment le rapport. Le score de confiance augmente. L'alerte expire en 6h.</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CATEGORIES ───────────────────────────────────────────────── -->
+<section id="categories">
+  <div class="container">
+    <div class="section-tag">
+      <span data-kr>Tip ensidan</span><span data-fr>Types d'incidents</span>
+    </div>
+    <h2 class="section-title">
+      <span data-kr>6 kategori alèt</span><span data-fr>6 catégories d'alertes</span>
+    </h2>
+    <p class="section-sub">
+      <span data-kr>Rapòte nenpòt sitiyasyon ki afekte sekirite kominote a.</span>
+      <span data-fr>Signalez toute situation affectant la sécurité de la communauté.</span>
+    </p>
+
+    <div class="cats">
+      <div class="cat-card" style="background:rgba(232,54,42,0.08);border-color:rgba(232,54,42,0.2)">
+        <div class="cat-emoji">⚠️</div>
+        <div class="cat-name" style="color:#E8362A">
+          <span data-kr>Vyolans / Kout Zam</span><span data-fr>Violence / Armes</span>
+        </div>
+      </div>
+      <div class="cat-card" style="background:rgba(245,158,11,0.08);border-color:rgba(245,158,11,0.2)">
+        <div class="cat-emoji">🚧</div>
+        <div class="cat-name" style="color:#F59E0B">
+          <span data-kr>Wout Bloke</span><span data-fr>Route Bloquée</span>
+        </div>
+      </div>
+      <div class="cat-card" style="background:rgba(59,130,246,0.08);border-color:rgba(59,130,246,0.2)">
+        <div class="cat-emoji">💧</div>
+        <div class="cat-name" style="color:#3B82F6">
+          <span data-kr>Inondasyon</span><span data-fr>Inondation</span>
+        </div>
+      </div>
+      <div class="cat-card" style="background:rgba(16,185,129,0.08);border-color:rgba(16,185,129,0.2)">
+        <div class="cat-emoji">✅</div>
+        <div class="cat-name" style="color:#10B981">
+          <span data-kr>Zòn Lib</span><span data-fr>Zone Libre</span>
+        </div>
+      </div>
+      <div class="cat-card" style="background:rgba(139,92,246,0.08);border-color:rgba(139,92,246,0.2)">
+        <div class="cat-emoji">🏥</div>
+        <div class="cat-name" style="color:#8B5CF6">
+          <span data-kr>Medikal</span><span data-fr>Médical</span>
+        </div>
+      </div>
+      <div class="cat-card" style="background:rgba(100,116,139,0.08);border-color:rgba(100,116,139,0.2)">
+        <div class="cat-emoji">ℹ️</div>
+        <div class="cat-name" style="color:#9CA3AF">
+          <span data-kr>Lòt</span><span data-fr>Autre</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PRIVACY ──────────────────────────────────────────────────── -->
+<section id="privacy">
+  <div class="container">
+    <div class="section-tag">
+      <span data-kr>Konfidansyalite</span><span data-fr>Confidentialité</span>
+    </div>
+    <h2 class="section-title">
+      <span data-kr>Idantite ou pap janm konnen</span>
+      <span data-fr>Votre identité ne sera jamais connue</span>
+    </h2>
+    <p class="section-sub">
+      <span data-kr>Nou bati Pwoteksyon pou pwoteje ou — menm avan ou rapòte anyen.</span>
+      <span data-fr>Pwoteksyon est conçu pour vous protéger — avant même que vous signalez quoi que ce soit.</span>
+    </p>
+
+    <div class="privacy-grid">
+      <div class="privacy-card">
+        <div class="privacy-icon">🔒</div>
+        <h4><span data-kr>Pa gen kont</span><span data-fr>Aucun compte</span></h4>
+        <p>
+          <span data-kr>Pa gen non, imèl, ni nimewo telefòn. Ou pa bezwen kreye kont pou itilize app la.</span>
+          <span data-fr>Pas de nom, d'email, ni de numéro de téléphone. Aucun compte requis pour utiliser l'app.</span>
+        </p>
+      </div>
+      <div class="privacy-card">
+        <div class="privacy-icon">🛡️</div>
+        <h4><span data-kr>Pa gen done pèsonèl</span><span data-fr>Aucune donnée personnelle</span></h4>
+        <p>
+          <span data-kr>Menm devlopè a pa ka idantifye moun ki fè yon rapò. Zéro tras pèsonèl.</span>
+          <span data-fr>Même le développeur ne peut pas identifier qui a fait un rapport. Zéro trace personnelle.</span>
+        </p>
+      </div>
+      <div class="privacy-card">
+        <div class="privacy-icon">⏳</div>
+        <h4><span data-kr>Ekspire nan 6 è</span><span data-fr>Expire en 6 heures</span></h4>
+        <p>
+          <span data-kr>Tout alèt efase otomatikman apre 6 è. Pa gen achiv pèmanan.</span>
+          <span data-fr>Toutes les alertes sont automatiquement supprimées après 6 heures. Aucune archive permanente.</span>
+        </p>
+      </div>
+      <div class="privacy-card">
+        <div class="privacy-icon">📷</div>
+        <h4><span data-kr>Foto san EXIF</span><span data-fr>Photos sans EXIF</span></h4>
+        <p>
+          <span data-kr>Foto yo trete pou retire tout metadonè (GPS, dat, aparèy) avan yo voye.</span>
+          <span data-fr>Les photos sont traitées pour supprimer toutes les métadonnées (GPS, date, appareil) avant envoi.</span>
+        </p>
+      </div>
+      <div class="privacy-card">
+        <div class="privacy-icon">👥</div>
+        <h4><span data-kr>Modere pa kominote</span><span data-fr>Modéré par la communauté</span></h4>
+        <p>
+          <span data-kr>Itilizatè yo ka vote pou konfime oswa demanti rapò. Twa siyal kache yon alèt.</span>
+          <span data-fr>Les utilisateurs peuvent voter pour confirmer ou démentir. Trois signalements masquent une alerte.</span>
+        </p>
+      </div>
+      <div class="privacy-card">
+        <div class="privacy-icon">🌍</div>
+        <h4><span data-kr>Done pa vann</span><span data-fr>Données non vendues</span></h4>
+        <p>
+          <span data-kr>Done ou yo pa janm vann bay twazyèm pati san konsantman. Pa gen piblisite.</span>
+          <span data-fr>Vos données ne sont jamais vendues à des tiers sans consentement. Aucune publicité.</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── DOWNLOAD ──────────────────────────────────────────────────── -->
+<section id="download" style="text-align:center">
+  <div class="container">
+    <div class="section-tag" style="text-align:center">
+      <span data-kr>Telechaje</span><span data-fr>Télécharger</span>
+    </div>
+    <h2 class="section-title">
+      <span data-kr>Disponib sou Android</span><span data-fr>Disponible sur Android</span>
+    </h2>
+    <p class="section-sub" style="margin:0 auto 40px">
+      <span data-kr>Gratis. Pa gen piblisite. Pa gen done pèsonèl. Pou tout Ayisyen.</span>
+      <span data-fr>Gratuit. Sans publicité. Sans données personnelles. Pour tous les Haïtiens.</span>
+    </p>
+    <a class="btn-primary" href="https://play.google.com/store/apps/details?id=ht.pwoteksyon.app" style="font-size:18px;padding:20px 40px;margin:0 auto;display:inline-flex">
+      📲 Google Play
+    </a>
+    <p style="margin-top:20px;font-size:13px;color:var(--text3)">
+      <span data-kr>iOS ap vini byento</span><span data-fr>iOS bientôt disponible</span>
+    </p>
+  </div>
+</section>
+
+<!-- ── PRIVACY POLICY ───────────────────────────────────────────── -->
+<section id="policy">
+  <div class="container">
+    <div class="section-tag">
+      <span data-kr>Politik Konfidansyalite</span><span data-fr>Politique de Confidentialité</span>
+    </div>
+    <h2 class="section-title">
+      <span data-kr>Politik Konfidansyalite</span><span data-fr>Politique de Confidentialité</span>
+    </h2>
+
+    <!-- KREYÒL -->
+    <div data-kr>
+      <div class="policy-box">
+        <p class="policy-date">Dènye mizajou : 28 me 2026</p>
+
+        <h3>1. Enfòmasyon nou kolekte</h3>
+        <p>Pwoteksyon kolekte sèlman enfòmasyon ki nesesè pou fonksyone :</p>
+        <ul>
+          <li><strong>Lokalizasyon GPS</strong> — pou detekte kote ensidan an ye. Nou pa kenbe istwa deplasman ou.</li>
+          <li><strong>Foto (opsyonèl)</strong> — si ou chwazi ajoute youn. Metadonè (EXIF, GPS foto) retire otomatikman.</li>
+          <li><strong>Kategori ak deskripsyon ensidan</strong> — tèks ou ekri sèlman.</li>
+          <li><strong>Token notifikasyon</strong> — pou voye alèt pre ou (pa gen idantite akonpaye l).</li>
+        </ul>
+
+        <h3>2. Sa nou PA kolekte</h3>
+        <ul>
+          <li>Non, prenon, ou nenpòt idantite</li>
+          <li>Nimewo telefòn oswa adrès imèl</li>
+          <li>Istwa navigasyon oswa koneksyon</li>
+          <li>Enfòmasyon peman</li>
+          <li>Nenpòt done ki ka idantifye ou pèsonèlman</li>
+        </ul>
+
+        <h3>3. Kijan nou itilize done yo</h3>
+        <p>Done yo itilize sèlman pou :</p>
+        <ul>
+          <li>Afiche alèt sou kat la pou lòt itilizatè nan zòn nan</li>
+          <li>Voye notifikasyon pou ensidan pre ou</li>
+          <li>Modere kontni ki rapòte pa kominote a</li>
+        </ul>
+
+        <h3>4. Dire done yo</h3>
+        <p>Tout alèt efase otomatikman apre <strong>6 è</strong>. Pa gen achiv pèmanan pou rapò endividyèl.</p>
+
+        <h3>5. Pataj done</h3>
+        <p>Nou <strong>pa vann</strong> ni pataje done ou ak twazyèm pati, eksepte :</p>
+        <ul>
+          <li>Supabase (enfrastrikti done nou, baze Etazini)</li>
+          <li>Si lalwa egzije l (òdonans tribinal)</li>
+        </ul>
+
+        <h3>6. Sekirite</h3>
+        <p>Done yo estoke sou sèvè Supabase pwoteje ak chifraj SSL/TLS. Aksè limit pa règ nivo ranje (Row-Level Security).</p>
+
+        <h3>7. Dwa ou yo</h3>
+        <p>Paske nou pa kenbe idantite ou, nou pa ka asosye yon rapò ak ou. Si ou vle retire yon rapò ou fè, kontakte nou ak ID alèt la.</p>
+
+        <h3>8. Kontakte nou</h3>
+        <p>Pou nenpòt kesyon sou konfidansyalite : <a href="mailto:contact@pwoteksyon.ht" style="color:var(--blue)">contact@pwoteksyon.ht</a></p>
+      </div>
+    </div>
+
+    <!-- FRANÇAIS -->
+    <div data-fr>
+      <div class="policy-box">
+        <p class="policy-date">Dernière mise à jour : 28 mai 2026</p>
+
+        <h3>1. Informations que nous collectons</h3>
+        <p>Pwoteksyon collecte uniquement les informations nécessaires à son fonctionnement :</p>
+        <ul>
+          <li><strong>Localisation GPS</strong> — pour détecter où se trouve l'incident. Nous ne conservons pas votre historique de déplacements.</li>
+          <li><strong>Photo (optionnel)</strong> — si vous choisissez d'en ajouter une. Les métadonnées (EXIF, GPS photo) sont supprimées automatiquement.</li>
+          <li><strong>Catégorie et description de l'incident</strong> — uniquement le texte que vous saisissez.</li>
+          <li><strong>Token de notification</strong> — pour envoyer des alertes proches de vous (sans identité associée).</li>
+        </ul>
+
+        <h3>2. Ce que nous NE collectons PAS</h3>
+        <ul>
+          <li>Nom, prénom, ou toute identité</li>
+          <li>Numéro de téléphone ou adresse email</li>
+          <li>Historique de navigation ou de connexion</li>
+          <li>Informations de paiement</li>
+          <li>Toute donnée permettant de vous identifier personnellement</li>
+        </ul>
+
+        <h3>3. Comment nous utilisons les données</h3>
+        <p>Les données sont utilisées uniquement pour :</p>
+        <ul>
+          <li>Afficher les alertes sur la carte pour les utilisateurs de la zone</li>
+          <li>Envoyer des notifications pour les incidents proches de vous</li>
+          <li>Modérer les contenus signalés par la communauté</li>
+        </ul>
+
+        <h3>4. Durée de conservation</h3>
+        <p>Toutes les alertes sont supprimées automatiquement après <strong>6 heures</strong>. Aucune archive permanente des rapports individuels.</p>
+
+        <h3>5. Partage des données</h3>
+        <p>Nous ne <strong>vendons</strong> ni ne partageons vos données avec des tiers, sauf :</p>
+        <ul>
+          <li>Supabase (notre infrastructure de données, basée aux États-Unis)</li>
+          <li>Si la loi l'exige (ordonnance judiciaire)</li>
+        </ul>
+
+        <h3>6. Sécurité</h3>
+        <p>Les données sont stockées sur des serveurs Supabase protégés par chiffrement SSL/TLS. L'accès est limité par des règles de sécurité au niveau des lignes (Row-Level Security).</p>
+
+        <h3>7. Vos droits</h3>
+        <p>Étant donné que nous ne conservons aucune identité, nous ne pouvons pas associer un rapport à vous. Si vous souhaitez supprimer un rapport que vous avez soumis, contactez-nous avec l'ID de l'alerte.</p>
+
+        <h3>8. Nous contacter</h3>
+        <p>Pour toute question relative à la confidentialité : <a href="mailto:contact@pwoteksyon.ht" style="color:var(--blue)">contact@pwoteksyon.ht</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ───────────────────────────────────────────────────── -->
+<footer>
+  <div class="footer-logo">🛡️ Pwoteksyon</div>
+  <div class="footer-sub">
+    <span data-kr>Fèt ann Ayiti, pou Ayiti.</span>
+    <span data-fr>Fait en Haïti, pour Haïti.</span>
+  </div>
+  <div class="footer-links">
+    <a href="#how"><span data-kr>Kijan</span><span data-fr>Comment</span></a>
+    <a href="#privacy"><span data-kr>Konfidansyalite</span><span data-fr>Confidentialité</span></a>
+    <a href="#policy"><span data-kr>Politik</span><span data-fr>Politique</span></a>
+    <a href="mailto:contact@pwoteksyon.ht">contact@pwoteksyon.ht</a>
+  </div>
+  <div class="footer-copy">© 2026 Pwoteksyon. <span data-kr>Tout dwa rezève.</span><span data-fr>Tous droits réservés.</span></div>
+</footer>
+
+<script>
+  function setLang(lang) {
+    document.body.className = 'lang-' + lang;
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    document.querySelector(`.lang-btn[onclick="setLang('${lang}')"]`).classList.add('active');
+    document.documentElement.lang = lang === 'kr' ? 'ht' : 'fr';
+  }
+
+  // Smooth scroll offset for fixed navbar
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (!target) return;
+      e.preventDefault();
+      window.scrollTo({ top: target.offsetTop - 72, behavior: 'smooth' });
+    });
+  });
+
+  // Fade-in on scroll
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.style.opacity = '1'; e.target.style.transform = 'none'; }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.step, .cat-card, .privacy-card').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>
